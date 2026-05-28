@@ -17,12 +17,28 @@ Prowlarr starts immediately with no pre-configuration required.
 
 Once connected, any indexer you add or update in Prowlarr is synced automatically to all linked apps.
 
-## Connecting to other \*arr apps on StartOS
+## Connecting to other apps on StartOS
 
-When linking Sonarr, Radarr, or similar apps installed on the same StartOS node:
+Services on the same StartOS node communicate over an internal network using the address `http://<package-id>.startos:<port>`. Use these addresses when connecting Prowlarr to other services — do **not** use `localhost` or the LAN address shown on the Dashboard.
 
-- Use the app's **LAN address** (shown on its Dashboard tab) as the server URL.
-- Copy the **API key** from the app's **Settings → General** page.
+### Download clients
+
+| App | Host | Port |
+| --- | ---- | ---- |
+| qBittorrent | `qbittorrent.startos` | `8080` |
+
+To add qBittorrent: **Settings → Download Clients → Add → qBittorrent**, then enter the host and port above. The username is `admin` and the password is whatever was set via qBittorrent's **Reset Admin Password** action.
+
+### \*arr apps (Sonarr, Radarr, Lidarr, Readarr)
+
+| App | Host | Port |
+| --- | ---- | ---- |
+| Sonarr | `sonarr.startos` | `8989` |
+| Radarr | `radarr.startos` | `7878` |
+| Lidarr | `lidarr.startos` | `8686` |
+| Readarr | `readarr.startos` | `8787` |
+
+To link an app: **Settings → Apps → Add**, select the app, enter the host and port above, then paste the API key from that app's **Settings → General** page.
 
 ## Limitations
 
