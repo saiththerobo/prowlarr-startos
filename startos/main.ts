@@ -19,20 +19,33 @@ export const main = sdk.setupMain(async ({ effects }) => {
     'prowlarr-sub',
   )
 
-  return sdk.Daemons.of(effects).addDaemon('primary', {
-    subcontainer: prowlarrSub,
-    exec: {
-      command: ['/app/prowlarr/bin/Prowlarr', '-nobrowser', '-data=/config'],
-    },
-    ready: {
-      display: i18n('Web Interface'),
-      fn: () =>
-        sdk.healthCheck.checkPortListening(effects, uiPort, {
-          successMessage: i18n('The web interface is ready'),
-          errorMessage: i18n('The web interface is not ready'),
-        }),
-      gracePeriod: 30_000,
-    },
-    requires: [],
-  })
+  return sdk.Daemons.of(effects)
+    .addOneshot('setup-tmpdir', {
+      subcontainer: prowlarrSub,
+      exec: {
+        command: ['mkdir', '-p', '/run/prowlarr-temp'],
+        user: 'root',
+      },
+      requires: [],
+    })
+    .addDaemon('primary', {
+      subcontainer: prowlarrSub,
+      exec: {
+        command: ['/app/prowlarr/bin/Prowlarr', '-nobrowser', '-data=/config'],
+        env: {
+          HOME: '/config',
+          ASPNETCORE_FORWARDEDHEADERS_ENABLED: 'true',
+        },
+      },
+      ready: {
+        display: i18n('Web Interface'),
+        fn: () =>
+          sdk.healthCheck.checkPortListening(effects, uiPort, {
+            successMessage: i18n('The web interface is ready'),
+            errorMessage: i18n('The web interface is not ready'),
+          }),
+        gracePeriod: 30_000,
+      },
+      requires: ['setup-tmpdir'],
+    })
 })
