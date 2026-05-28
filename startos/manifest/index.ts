@@ -2,19 +2,20 @@ import { setupManifest } from '@start9labs/start-sdk'
 import { long, short } from './i18n'
 
 export const manifest = setupManifest({
-  id: 'hello-world',
-  title: 'Hello World',
-  license: 'MIT',
-  packageRepo: 'https://github.com/Start9Labs/hello-world-startos',
-  upstreamRepo: 'https://github.com/Start9Labs/hello-world',
-  marketingUrl: 'https://start9.com/',
-  donationUrl: 'https://donate.start9.com/',
+  id: 'prowlarr',
+  title: 'Prowlarr',
+  license: 'GPL-3.0',
+  packageRepo: 'https://github.com/saiththerobo/prowlarr-startos',
+  upstreamRepo: 'https://github.com/Prowlarr/Prowlarr',
+  marketingUrl: 'https://prowlarr.com/',
+  donationUrl: null,
+  docsUrls: ['https://wiki.servarr.com/prowlarr'],
   description: { short, long },
   volumes: ['main'],
   images: {
-    'hello-world': {
-      source: { dockerTag: 'ghcr.io/start9labs/hello-world:2.0.0' },
-      arch: ['x86_64', 'aarch64', 'riscv64'],
+    prowlarr: {
+      source: { dockerTag: 'lscr.io/linuxserver/prowlarr:2.3.5' },
+      arch: ['x86_64', 'aarch64'],
     },
   },
   alerts: {

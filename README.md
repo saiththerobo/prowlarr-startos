@@ -1,16 +1,12 @@
 <p align="center">
-  <img src="icon.svg" alt="Hello World Logo" width="21%">
+  <img src="icon.svg" alt="Prowlarr Logo" width="21%">
 </p>
 
-# Hello World on StartOS
+# Prowlarr on StartOS
 
-> **Upstream repo:** <https://github.com/Start9Labs/hello-world>
+> **Upstream repo:** <https://github.com/Prowlarr/Prowlarr>
 
-A minimal reference service for StartOS. It displays a simple web page — nothing more. Use [this repository](https://github.com/Start9Labs/hello-world-startos) as a template when packaging a new service for StartOS.
-
-## Getting Started
-
-To learn how to use this template to create your own StartOS service package, see the [Packaging Guide](https://docs.start9.com/packaging).
+Prowlarr is an indexer manager and proxy for Sonarr, Radarr, Lidarr, Readarr, and other \*arr apps. It centralises indexer management so you configure your trackers once in Prowlarr and sync them automatically to all connected apps.
 
 ---
 
@@ -34,39 +30,41 @@ To learn how to use this template to create your own StartOS service package, se
 
 ## Image and Container Runtime
 
-| Property      | Value                                  |
-| ------------- | -------------------------------------- |
-| Image         | `ghcr.io/start9labs/hello-world`       |
-| Architectures | x86_64, aarch64, riscv64               |
-| Command       | `hello-world`                          |
+| Property      | Value                                        |
+| ------------- | -------------------------------------------- |
+| Image         | `lscr.io/linuxserver/prowlarr:2.3.5`         |
+| Architectures | x86_64, aarch64                              |
+| Entrypoint    | `/init` (s6-overlay)                         |
+
+Runs as root inside the container (`PUID=0`, `PGID=0`).
 
 ---
 
 ## Volume and Data Layout
 
-| Volume | Mount Point | Purpose         |
-| ------ | ----------- | --------------- |
-| `main` | `/data`     | Persistent data |
+| Volume | Mount Point | Purpose                            |
+| ------ | ----------- | ---------------------------------- |
+| `main` | `/config`   | Database, logs, and configuration  |
 
 ---
 
 ## Installation and First-Run Flow
 
-No special setup. Install and start — the web page is immediately available.
+On first start Prowlarr initialises its SQLite database and configuration files under `/config`. No admin setup is required before visiting the web UI. Prowlarr will prompt you to set authentication in **Settings → General** after logging in for the first time.
 
 ---
 
 ## Configuration Management
 
-No configurable settings. The service runs with no user-facing configuration.
+All Prowlarr configuration is done through the web UI. No StartOS-side config is exposed. Settings persist in the `main` volume across restarts and upgrades.
 
 ---
 
 ## Network Access and Interfaces
 
-| Interface | Port | Protocol | Purpose              |
-| --------- | ---- | -------- | -------------------- |
-| Web UI    | 80   | HTTP     | Hello World web page |
+| Interface | Port | Protocol | Purpose             |
+| --------- | ---- | -------- | ------------------- |
+| Web UI    | 9696 | HTTP     | Prowlarr web interface |
 
 **Access methods:**
 
@@ -87,7 +85,7 @@ None.
 
 **Included in backup:**
 
-- `main` volume
+- `main` volume (database, config, logs)
 
 **Restore behavior:** Volume is fully restored before the service starts.
 
@@ -95,9 +93,9 @@ None.
 
 ## Health Checks
 
-| Check         | Method              | Messages                                                           |
-| ------------- | ------------------- | ------------------------------------------------------------------ |
-| Web Interface | Port listening (80) | Success: "The web interface is ready" / Error: "The web interface is not ready" |
+| Check         | Method              | Messages                                                               |
+| ------------- | ------------------- | ---------------------------------------------------------------------- |
+| Web Interface | Port listening (9696) | Success: "The web interface is ready" / Error: "The web interface is not ready" |
 
 ---
 
@@ -109,13 +107,14 @@ None.
 
 ## Limitations and Differences
 
-1. **No meaningful functionality** — this is a reference/template package only
+1. **No HTTPS termination inside the container** — TLS is handled by the StartOS reverse proxy.
+2. **Authentication is not pre-configured** — set it up in Settings → General after first launch.
 
 ---
 
 ## What Is Unchanged from Upstream
 
-The service is identical to upstream. There are no modifications.
+The service is identical to upstream. No patches are applied to the image.
 
 ---
 
@@ -128,14 +127,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for build instructions and development wo
 ## Quick Reference for AI Consumers
 
 ```yaml
-package_id: hello-world
-image: ghcr.io/start9labs/hello-world
-architectures: [x86_64, aarch64, riscv64]
+package_id: prowlarr
+image: lscr.io/linuxserver/prowlarr:2.3.5
+architectures: [x86_64, aarch64]
 volumes:
-  main: /data
+  main: /config
 ports:
-  ui: 80
+  ui: 9696
 dependencies: none
-startos_managed_env_vars: none
+startos_managed_env_vars: [PUID, PGID, TZ]
 actions: none
 ```
