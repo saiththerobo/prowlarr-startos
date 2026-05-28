@@ -22,12 +22,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
   return sdk.Daemons.of(effects).addDaemon('primary', {
     subcontainer: prowlarrSub,
     exec: {
-      command: sdk.useEntrypoint(),
-      env: {
-        PUID: '0',
-        PGID: '0',
-        TZ: 'Etc/UTC',
-      },
+      command: ['/app/prowlarr/bin/Prowlarr', '-nobrowser', '-data=/config'],
     },
     ready: {
       display: i18n('Web Interface'),
