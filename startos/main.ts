@@ -12,7 +12,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
     readonly: false,
   })
 
-  const prowlarrSub = await sdk.SubContainer.of(
+  const prowlarrSub = sdk.SubContainer.of(
     effects,
     { imageId: 'prowlarr' },
     mounts,

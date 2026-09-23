@@ -28,7 +28,7 @@ For a complete list of build options, see [Makefile](https://docs.start9.com/pac
 
 ## CI/CD
 
-Three workflows under `.github/workflows/` wrap reusable workflows in [`start9labs/shared-workflows`](https://github.com/Start9Labs/shared-workflows):
+Three workflows under `.github/workflows/` wrap the reusable workflows in [`Start9Labs/start-technologies`](https://github.com/Start9Labs/start-technologies):
 
 - **`build.yml`** — on PR, builds the `.s9pk` and uploads per-arch artifacts for sideload testing.
 - **`release.yml`** — on `v*` tag, builds per arch and publishes to the test registry.

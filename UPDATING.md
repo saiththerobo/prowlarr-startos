@@ -17,4 +17,4 @@ The current pin lives in `startos/manifest/index.ts` at `images['prowlarr'].sour
 ## Applying the bump
 
 - Bump `dockerTag` in `startos/manifest/index.ts` to `lscr.io/linuxserver/prowlarr:<new version>`.
-- Create a new version file in `startos/versions/` per the release instructions in `CLAUDE.md`.
+- Update `startos/versions/current.ts` per the release instructions in the workspace's `AGENTS.local.md`.

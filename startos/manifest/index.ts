@@ -14,17 +14,9 @@ export const manifest = setupManifest({
   volumes: ['main'],
   images: {
     prowlarr: {
-      source: { dockerTag: 'lscr.io/linuxserver/prowlarr:2.4.0' },
+      source: { dockerTag: 'lscr.io/linuxserver/prowlarr:2.6.5' },
       arch: ['x86_64', 'aarch64'],
     },
-  },
-  alerts: {
-    install: null,
-    update: null,
-    uninstall: null,
-    restore: null,
-    start: null,
-    stop: null,
   },
   dependencies: {},
 })
